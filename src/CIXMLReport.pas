@@ -29,6 +29,7 @@ const
     C_ATTR_CLASS_NAME = 'classname'; (* name attribute for property, testcase and testsuite elements *)
     C_ATTR_VALUE     = 'value';      (* name attribute for property *)
     C_ATTR_TIME      = 'time';       (* time attribute for testcase and testsuite elements *)
+    C_ATTR_SUCCESS   = 'success';    (* success attribute for testcase elements *)
     C_ATTR_ERRORS    = 'errors';     (* errors attribute for testsuite elements *)
     C_ATTR_FAILURES  = 'failures';   (* failures attribute for testsuite elements *)
     C_ATTR_TESTS     = 'tests';      (* tests attribute for testsuite elements *)
@@ -120,15 +121,18 @@ type
     function Get_Time: string;
     function Get_Failure: IXMLFailureType;
     function Get_Error: IXMLErrorType;
+    function Get_Success: Boolean;
     procedure Set_Name(Value: string);
     procedure Set_ClassName(Value: string);
     procedure Set_Time(Value: string);
+    procedure Set_Success(Value: Boolean);
     { Methods & Properties }
     property Name: string read Get_Name write Set_Name;
     property ClassName: string read Get_ClassName write Set_ClassName;
     property Time: string read Get_Time write Set_Time;
     property Failure: IXMLFailureType read Get_Failure;
     property Error: IXMLErrorType read Get_Error;
+    property Success: Boolean read Get_Success write Set_Success;
   end;
 
 { IXMLTestcaseTypeList }
@@ -242,9 +246,11 @@ type
     function Get_Time: string;
     function Get_Failure: IXMLFailureType;
     function Get_Error: IXMLErrorType;
+    function Get_Success: Boolean;
     procedure Set_Name(Value: string);
     procedure Set_ClassName(Value: string);
     procedure Set_Time(Value: string);
+    procedure Set_Success(Value: Boolean);
   public
     procedure AfterConstruction; override;
   end;
@@ -291,6 +297,9 @@ const
   TargetNamespace = '';
 
 implementation
+
+uses
+  System.SysUtils;
 
 { Global Functions }
 
@@ -470,6 +479,11 @@ begin
   Result := AttributeNodes[C_ATTR_NAME].Text;
 end;
 
+function TXMLTestcaseType.Get_Success: Boolean;
+begin
+  Result := StrToBool(AttributeNodes[C_ATTR_SUCCESS].Text);
+end;
+
 procedure TXMLTestcaseType.Set_ClassName(Value: string);
 begin
   SetAttribute(C_ATTR_CLASS_NAME, Value);
@@ -478,6 +492,11 @@ end;
 procedure TXMLTestcaseType.Set_Name(Value: string);
 begin
   SetAttribute(C_ATTR_NAME, Value);
+end;
+
+procedure TXMLTestcaseType.Set_Success(Value: Boolean);
+begin
+  SetAttribute(C_ATTR_SUCCESS, BoolToStr(Value, True));
 end;
 
 function TXMLTestcaseType.Get_Time: string;

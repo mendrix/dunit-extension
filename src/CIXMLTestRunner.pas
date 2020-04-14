@@ -189,6 +189,7 @@ begin
       iCase := iSuite.Testcase.Add;
       iCase.Name := test.Name;
       iCase.ClassName := GetUnitName(TObject(test).ClassName);
+      iCase.Success := True;
 
       runTime := now - caseStartTime;
       iCase.Time := FormatElapsedTime(runTime);
@@ -224,6 +225,7 @@ begin
       iCase.Name := error.FailedTest.GetName;
       iCase.ClassName := GetUnitName(TObject(error.FailedTest).ClassName);
       iCase.Time := FormatElapsedTime(runTime);
+      iCase.Success := False;
 
       iCase.Error.Message := error.ThrownExceptionMessage;
       iCase.Error.Type_   := error.ThrownExceptionName;
@@ -261,6 +263,7 @@ begin
       iCase.Name := failure.FailedTest.GetName;
       iCase.ClassName := GetUnitName(TObject(failure.FailedTest).ClassName);
       iCase.Time := FormatElapsedTime(runTime);
+      iCase.Success := False;
       
       iCase.Failure.Message := failure.ThrownExceptionMessage;
       iCase.Failure.Type_   := failure.ThrownExceptionName;
